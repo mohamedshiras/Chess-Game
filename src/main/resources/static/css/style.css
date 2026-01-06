@@ -1,0 +1,676 @@
+/* ============================================
+   Chess Game - Professional Modern Design
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    /* Dark sophisticated palette */
+    --bg-primary: #0f0f0f;
+    --bg-secondary: #1a1a1a;
+    --bg-card: #222222;
+    --bg-elevated: #2a2a2a;
+
+    /* Text colors */
+    --text-primary: #ffffff;
+    --text-secondary: #a0a0a0;
+    --text-muted: #6b6b6b;
+
+    /* Accent colors */
+    --accent: #3b82f6;
+    --accent-glow: rgba(59, 130, 246, 0.15);
+    --success: #22c55e;
+    --warning: #eab308;
+    --danger: #ef4444;
+
+    /* Board colors */
+    --light-square: #e8e8e8;
+    --dark-square: #769656;
+    --selected: #f6f669;
+    --last-move: rgba(255, 255, 0, 0.2);
+
+    /* Borders & Effects */
+    --border: rgba(255, 255, 255, 0.08);
+    --border-hover: rgba(255, 255, 255, 0.15);
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
+    --shadow-glow: 0 0 30px rgba(59, 130, 246, 0.2);
+
+    /* Spacing & Radius */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg-primary);
+    min-height: 100vh;
+    color: var(--text-primary);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 24px;
+}
+
+/* ==================== Header ==================== */
+header {
+    text-align: center;
+    margin-bottom: 48px;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #ffffff 0%, #a0a0a0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+    letter-spacing: -0.03em;
+}
+
+.subtitle {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+}
+
+/* ==================== Game Layout ==================== */
+.game-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 32px;
+    margin-bottom: 48px;
+}
+
+/* ==================== Side Panels ==================== */
+.side-panel {
+    width: 180px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    min-height: 480px;
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(10px);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.side-panel:hover {
+    border-color: var(--border-hover);
+    box-shadow: var(--shadow-sm);
+}
+
+.side-panel h3 {
+    text-align: center;
+    margin-bottom: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.panel-info {
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+}
+
+.captured-pieces {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    flex: 1;
+    align-content: flex-start;
+}
+
+.captured-piece {
+    font-size: 1.4rem;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-elevated);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.captured-piece:hover {
+    transform: scale(1.1);
+    background: var(--bg-secondary);
+}
+
+.data-structure-info {
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+}
+
+.ds-label {
+    display: block;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.ds-value {
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 0.7rem;
+}
+
+/* ==================== Board Section ==================== */
+.board-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Game Status Bar */
+.game-info {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.turn-indicator {
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 10px 28px;
+    border-radius: 50px;
+    display: inline-block;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+    letter-spacing: 0.02em;
+}
+
+.turn-indicator.white-turn {
+    background: linear-gradient(135deg, #ffffff, #e0e0e0);
+    color: #1a1a1a;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+}
+
+.turn-indicator.black-turn {
+    background: linear-gradient(135deg, #3a3a3a, #1a1a1a);
+    color: #ffffff;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+}
+
+.game-status {
+    font-size: 0.9rem;
+    font-weight: 600;
+    min-height: 24px;
+    letter-spacing: 0.02em;
+}
+
+.game-status.check {
+    color: var(--warning);
+    text-shadow: 0 0 20px rgba(234, 179, 8, 0.5);
+}
+
+.game-status.checkmate {
+    color: var(--danger);
+    text-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+}
+
+.game-status.stalemate {
+    color: var(--text-secondary);
+}
+
+/* ==================== Chess Board ==================== */
+.chess-board {
+    display: grid;
+    grid-template-columns: repeat(8, 64px);
+    grid-template-rows: repeat(8, 64px);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    border: 3px solid var(--bg-elevated);
+}
+
+.square {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.8rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    position: relative;
+}
+
+.square.light {
+    background: var(--light-square);
+}
+
+.square.dark {
+    background: var(--dark-square);
+}
+
+.square:hover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.1);
+    pointer-events: none;
+}
+
+.square.selected {
+    background: var(--selected) !important;
+}
+
+.square.valid-move::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 50%;
+}
+
+.square.valid-capture::after {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 4px solid rgba(0, 0, 0, 0.15);
+    border-radius: 50%;
+    background: transparent;
+}
+
+.square.last-move {
+    background: var(--last-move) !important;
+}
+
+/* ==================== Pieces ==================== */
+.piece {
+    user-select: none;
+    transition: transform 0.15s ease;
+    line-height: 1;
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3));
+}
+
+.piece:hover {
+    transform: scale(1.08);
+}
+
+.piece.white {
+    color: #ffffff;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+}
+
+.piece.black {
+    color: #1a1a1a;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+/* ==================== Control Buttons ==================== */
+.controls {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+.btn {
+    padding: 12px 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: inherit;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: 0.01em;
+}
+
+.btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+}
+
+.btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.btn-undo,
+.btn-redo {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+}
+
+.btn-undo:hover:not(:disabled),
+.btn-redo:hover:not(:disabled) {
+    background: var(--bg-card);
+    border-color: var(--border-hover);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-replay {
+    background: linear-gradient(135deg, var(--accent), #2563eb);
+    color: white;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+.btn-replay:hover:not(:disabled) {
+    box-shadow: 0 6px 25px rgba(59, 130, 246, 0.4);
+}
+
+.btn-reset {
+    background: var(--bg-elevated);
+    color: var(--danger);
+    border: 1px solid var(--border);
+}
+
+.btn-reset:hover:not(:disabled) {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: var(--danger);
+}
+
+/* ==================== Replay Controls ==================== */
+.replay-controls {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.replay-controls.hidden {
+    display: none;
+}
+
+.btn-replay-next {
+    background: linear-gradient(135deg, var(--success), #16a34a);
+    color: white;
+    box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+}
+
+.btn-replay-next:hover {
+    box-shadow: 0 6px 25px rgba(34, 197, 94, 0.4);
+}
+
+.btn-replay-end {
+    background: var(--bg-elevated);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+}
+
+.btn-replay-end:hover {
+    background: var(--bg-card);
+    border-color: var(--border-hover);
+}
+
+/* ==================== Move History ==================== */
+.history-container {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-bottom: 32px;
+    transition: border-color 0.3s ease;
+}
+
+.history-container:hover {
+    border-color: var(--border-hover);
+}
+
+.history-container h3 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+}
+
+.history-container .data-structure-info {
+    margin-top: 0;
+    margin-bottom: 16px;
+    padding-top: 0;
+    border-top: none;
+    text-align: left;
+}
+
+.move-history {
+    background: var(--bg-secondary);
+    padding: 16px 20px;
+    border-radius: var(--radius-md);
+    font-family: 'SF Mono', 'Fira Code', 'Monaco', monospace;
+    font-size: 0.85rem;
+    min-height: 48px;
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    line-height: 1.8;
+}
+
+.move-history:empty::after {
+    content: 'No moves yet — start playing!';
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+/* ==================== Info Section ==================== */
+.info-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    margin-bottom: 32px;
+}
+
+.info-section h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    text-align: center;
+    letter-spacing: -0.01em;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+.info-card {
+    background: var(--bg-secondary);
+    padding: 20px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.info-card h4 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+}
+
+.info-card p {
+    font-size: 0.8rem;
+    margin-bottom: 12px;
+    color: var(--text-secondary);
+}
+
+.info-card ul {
+    margin-left: 18px;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.info-card li {
+    margin-bottom: 6px;
+    line-height: 1.5;
+}
+
+.info-card code {
+    background: var(--accent-glow);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    color: var(--accent);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+/* ==================== Footer ==================== */
+footer {
+    text-align: center;
+    padding: 24px;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    border-top: 1px solid var(--border);
+}
+
+/* ==================== Replay Mode ==================== */
+.replaying .chess-board {
+    box-shadow: 0 0 0 4px var(--success), var(--shadow-lg);
+}
+
+.replaying .turn-indicator {
+    background: linear-gradient(135deg, var(--success), #16a34a) !important;
+    color: white !important;
+    border: none !important;
+}
+
+/* ==================== Animations ==================== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.container {
+    animation: fadeIn 0.5s ease;
+}
+
+/* ==================== Responsive Design ==================== */
+@media (max-width: 950px) {
+    .game-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .side-panel {
+        width: 100%;
+        max-width: 450px;
+        min-height: auto;
+        padding: 16px;
+    }
+
+    .captured-pieces {
+        min-height: 50px;
+    }
+
+    .data-structure-info {
+        margin-top: 16px;
+    }
+}
+
+@media (max-width: 580px) {
+    .container {
+        padding: 20px 16px;
+    }
+
+    header h1 {
+        font-size: 1.8rem;
+    }
+
+    .chess-board {
+        grid-template-columns: repeat(8, 44px);
+        grid-template-rows: repeat(8, 44px);
+    }
+
+    .square {
+        width: 44px;
+        height: 44px;
+        font-size: 2rem;
+    }
+
+    .controls {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .btn {
+        padding: 10px 16px;
+        font-size: 0.8rem;
+    }
+
+    .side-panel {
+        padding: 14px;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==================== Scrollbar Styling ==================== */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--bg-elevated);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
+
+/* ==================== Selection ==================== */
+::selection {
+    background: var(--accent);
+    color: white;
+}

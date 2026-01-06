@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess Game - Linked List Implementation</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>♔ Chess Game ♚</h1>
+            <p class="subtitle">Academic Project - Using Linked Lists for Data Storage</p>
+        </header>
+
+        <div class="game-container">
+            <!-- Left Panel - Black's Captured Pieces -->
+            <div class="side-panel left-panel">
+                <h3>Black Captured</h3>
+                <p class="panel-info">(Pieces White has taken)</p>
+                <div id="white-captured" class="captured-pieces">
+                    <!-- Populated by JavaScript - Uses Singly Linked List -->
+                </div>
+                <div class="data-structure-info">
+                    <span class="ds-label">Data Structure:</span>
+                    <span class="ds-value">Singly Linked List</span>
+                </div>
+            </div>
+
+            <!-- Center - Chess Board -->
+            <div class="board-container">
+                <div class="game-info">
+                    <div id="turn-indicator" class="turn-indicator">
+                        White's Turn
+                    </div>
+                    <div id="game-status" class="game-status"></div>
+                </div>
+
+                <div id="chess-board" class="chess-board">
+                    <!-- Board squares populated by JavaScript -->
+                </div>
+
+                <!-- Controls -->
+                <div class="controls">
+                    <button id="btn-undo" class="btn btn-undo" disabled>
+                        ↶ Undo
+                    </button>
+                    <button id="btn-redo" class="btn btn-redo" disabled>
+                        ↷ Redo
+                    </button>
+                    <button id="btn-replay" class="btn btn-replay">
+                        ▶ Replay
+                    </button>
+                    <button id="btn-reset" class="btn btn-reset">
+                        ↺ New Game
+                    </button>
+                </div>
+
+                <!-- Replay Controls (shown during replay) -->
+                <div id="replay-controls" class="replay-controls hidden">
+                    <button id="btn-replay-next" class="btn btn-replay-next">
+                        ▶ Next Move
+                    </button>
+                    <button id="btn-replay-end" class="btn btn-replay-end">
+                        ⏭ End Replay
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Panel - White's Captured Pieces -->
+            <div class="side-panel right-panel">
+                <h3>White Captured</h3>
+                <p class="panel-info">(Pieces Black has taken)</p>
+                <div id="black-captured" class="captured-pieces">
+                    <!-- Populated by JavaScript - Uses Singly Linked List -->
+                </div>
+                <div class="data-structure-info">
+                    <span class="ds-label">Data Structure:</span>
+                    <span class="ds-value">Singly Linked List</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Move History -->
+        <div class="history-container">
+            <h3>Move History</h3>
+            <div class="data-structure-info">
+                <span class="ds-label">Data Structure:</span>
+                <span class="ds-value">Doubly Linked List (enables Undo/Redo/Replay)</span>
+            </div>
+            <div id="move-history" class="move-history">
+                <!-- Populated by JavaScript - Uses Doubly Linked List -->
+            </div>
+        </div>
+
+        <!-- Info Section -->
+        <div class="info-section">
+            <h3>About This Project</h3>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>📋 Doubly Linked List</h4>
+                    <p><strong>Used for:</strong> Move History</p>
+                    <ul>
+                        <li>Each node stores: from, to, piece, captured piece</li>
+                        <li><strong>Undo:</strong> Traverse using <code>previous</code> pointer</li>
+                        <li><strong>Redo:</strong> Traverse using <code>next</code> pointer</li>
+                        <li><strong>Replay:</strong> Start from head, traverse forward</li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <h4>📋 Singly Linked List</h4>
+                    <p><strong>Used for:</strong> Captured Pieces & Active Pieces</p>
+                    <ul>
+                        <li>Separate lists for White and Black captures</li>
+                        <li>Active pieces tracked for each player</li>
+                        <li>Efficient addition/removal operations</li>
+                        <li>No arrays used for data storage</li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <h4>💾 No Database</h4>
+                    <p><strong>All data in memory:</strong></p>
+                    <ul>
+                        <li>No MySQL, MongoDB, or Firebase</li>
+                        <li>No localStorage or sessionStorage</li>
+                        <li>Data exists only at runtime</li>
+                        <li>Game resets on server restart</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Chess Game - PDSA Academic Module | Built with Java (Backend) & HTML/CSS/JS (Frontend)</p>
+        </footer>
+    </div>
+
+    <script src="js/chess.js"></script>
+</body>
+
+</html>
